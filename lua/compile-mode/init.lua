@@ -90,7 +90,8 @@ end
 M.open_file = function()
   local line = vim.api.nvim_get_current_line()
 
-  local file, line_num, char_num = string.match(line, "(\\S+):(%d+):(%d+)")
+  local file, line_num, char_num = string.match(line, "(%S+):(%d+):(%d+)")
+  print(file)
   if not file then return end
 
   -- Find the non-compilation window
