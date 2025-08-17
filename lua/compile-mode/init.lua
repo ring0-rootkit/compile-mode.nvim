@@ -51,8 +51,6 @@ M.compile = function()
 
 	if buf == nil then
 		buf = create_buffer()
-		-- TODO: remove command, maybe add command to go to file
-		-- vim.api.nvim_buf_set_keymap(buf, "n", "q", ":quit<CR>", { noremap = true, silent = true })
 	end
 
 	local start_date = vim.fn.strftime("%c")
