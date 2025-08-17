@@ -133,19 +133,12 @@ M.setup = function(opts)
 				syntax match CompParam /Compilation finished at .*/
 				syntax match CompParam /command:/
 
-				syntax match CompError /^error/
-				syntax match CompError / error/
-				syntax match CompError /^err/
-				syntax match CompError / err/
-
-				syntax match CompWarn /^warning/
-				syntax match CompWarn / warning/
-				syntax match CompWarn /^warn/
-				syntax match CompWarn / warn/
+				syntax match CompError /^error(.*:)?/
+				syntax match CompWarn /^warning(.*:)?/
 
 				highlight link CompHeader Title
 				highlight link CompParam Identifier
-				highlight link CompError Error
+				highlight link CompError ErrorMsg
 				highlight link CompWarn WarningMsg
 			]])
 		end
