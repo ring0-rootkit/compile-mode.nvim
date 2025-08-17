@@ -92,20 +92,13 @@ M.open_file = function()
   local col = vim.fn.col('.')
   local line_text = vim.fn.getline(line)
 
-
   local regex = vim.regex([[\S*:\d:\d]])
   local match_start, match_end = regex:match_str(line_text)
 
   if match_start and (col >= match_start+1) and (col <= match_end+1) then
     local matched_text = string.sub(line_text, match_start+1, match_end)
-    return {
-      text = matched_text,
-      start = match_start+1,
-      end = match_end,
-      line = line
-    }
+	print(matched_text)
   end
-  return nil
 end
 
 M.compile_setup = function(opts)
