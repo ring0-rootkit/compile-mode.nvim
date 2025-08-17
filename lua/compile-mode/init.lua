@@ -1,9 +1,5 @@
 local M = {}
 
--- if lasts.nvim exists, optionally caches arguments in 'lasting' storage.
-local lv = require("lasts").var or nil
-
--- keep a temporary cache of last passed arguments.
 local last_args = lv["compile_args"] or ""
 local next = next
 
@@ -33,7 +29,6 @@ end
 local function savetolv()
     if lv then
         lv["compile_args"] = last_args
-        require("lasts").save()
     end
 end
 
@@ -56,7 +51,8 @@ M.compile = function()
 
     if buf == nil then
         buf = create_buffer()
-        vim.api.nvim_buf_set_keymap(buf, "n", "q", ":quit<CR>", { noremap = true, silent = true })
+	-- TODO: remove command, maybe add command to go to file
+        -- vim.api.nvim_buf_set_keymap(buf, "n", "q", ":quit<CR>", { noremap = true, silent = true })
     end
 
     local start_date = vim.fn.strftime("%c")
@@ -127,9 +123,6 @@ M.setup = function(opts)
     vim.api.nvim_create_user_command("CompileSplitToggle", function()
         vertical_split = not vertical_split
     end, {})
-    -- give the buffer a local mapping to quit with `q`.
-    --vim.api.nvim_buf_set_keymap(buf, "n", "<leader>g", ":Recompile<CR>", { noremap = true, silent = true })
-    --vim.keymap.set("n", "<leader>c", ":Recompile<CR>", { noremap = true, silent = true })
 end
 
 return M

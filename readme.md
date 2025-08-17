@@ -34,7 +34,7 @@ Simply add using your favorite package manager:
 ```lua
 -- lazy.nvim
 return {
-  "lbzfran/compile-mode.nvim",
+  "ring0-rootkit/compile-mode.nvim",
   config function()
     local compile = require("compile-mode")
     compile.setup({
