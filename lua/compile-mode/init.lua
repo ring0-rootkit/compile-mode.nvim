@@ -170,7 +170,7 @@ M.setup = function(opts)
 				syntax match CompHelp /^help\(.*?:\)\?/
 				syntax match CompNote /^note\(.*?:\)\?/
 
-				syntax match CompLink /\S*:\d:\d/
+				syntax match CompLink /\S*:\d\+:\d\+/
 
 				highlight link CompHeader Title
 				highlight link CompParam Identifier
