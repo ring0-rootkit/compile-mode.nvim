@@ -91,7 +91,6 @@ M.open_file = function()
   local line = vim.api.nvim_get_current_line()
 
   local file, line_num, char_num = string.match(line, "(%S+):(%d+):(%d+)")
-  print(file)
   if not file then return end
 
   -- Find the non-compilation window
@@ -107,7 +106,7 @@ M.open_file = function()
 
   -- If no suitable window found, create one
   if not target_win then
-    vim.cmd("vsplit")  -- or "split" for horizontal
+    vim.cmd("vsplit")
     target_win = vim.api.nvim_get_current_win()
   end
 
