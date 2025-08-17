@@ -128,9 +128,13 @@ M.setup = function(opts)
       pattern = '*compilation*',
       callback = function()
         vim.cmd([[
-          syntax match MyOutputHeader /-\*- compile-mode;.* -\*-/
+          syntax match MyHeader /-\*- compile-mode;.* -\*-/
+          syntax match MyParam /Compilation started at .*/
+          syntax match MyParam /Compilation finished at .*/
+          syntax match MyParam /command:/
 
-          highlight link MyOutputHeader Title
+          highlight link MyHeader Title
+          highlight link MyParam Identifier
         ]])
       end
     })
