@@ -44,6 +44,8 @@ return {
             vertical_split = true,
             save_args = true,
         })
+        vim.keymap.set("n", "<leader>c", compile.compile_setup)
+        vim.keymap.set("n", "<leader>r", compile.compile)
     end,
 }
 ```

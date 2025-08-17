@@ -118,7 +118,7 @@ end
 
 M.compile_setup = function(opts)
 	-- sets the arguments to be executed.
-	if next(opts.fargs) == nil then
+	if opts == nil or next(opts.fargs) == nil then
 		last_args = vim.fn.input({
 			prompt = "Compile command: ",
 			default = last_args,
