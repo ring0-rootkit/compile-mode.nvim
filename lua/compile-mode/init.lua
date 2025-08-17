@@ -136,10 +136,18 @@ M.setup = function(opts)
 				syntax match CompError /^error\(.*?:\)\?/
 				syntax match CompWarn /^warning\(.*?:\)\?/
 
+				syntax match CompTip /^tip\(.*?:\)\?/
+				syntax match CompHelp /^help\(.*?:\)\?/
+				syntax match CompNote /^note\(.*?:\)\?/
+
 				highlight link CompHeader Title
 				highlight link CompParam Identifier
 				highlight link CompError ErrorMsg
 				highlight link CompWarn WarningMsg
+
+				highlight link CompTip MoreMsg
+				highlight link CompHelp MoreMsg
+				highlight link CompNote MoreMsg
 			]])
 		end
 	})
