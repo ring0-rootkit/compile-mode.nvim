@@ -88,16 +88,33 @@ M.compile = function()
 end
 
 M.open_file = function()
-  local line = vim.fn.line('.')
-  local col = vim.fn.col('.')
-  local line_text = vim.fn.getline(line)
+  local line = vim.api.nvim_get_current_line()
 
-  local regex = vim.regex([[\S*:\d:\d]])
-  local match_start, match_end = regex:match_str(line_text)
+  local file, line_num, char_num = string.match(line, "(\\S+):(%d+):(%d+)")
+  if not file then return end
 
-  if match_start and (col >= match_start+1) and (col <= match_end+1) then
-    local matched_text = string.sub(line_text, match_start+1, match_end)
-	print(matched_text)
+  -- Find the non-compilation window
+  local target_win
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    local buf_name = vim.api.nvim_buf_get_name(buf)
+    if not string.match(buf_name, "*compilation*") then
+      target_win = win
+      break
+    end
+  end
+
+  -- If no suitable window found, create one
+  if not target_win then
+    vim.cmd("vsplit")  -- or "split" for horizontal
+    target_win = vim.api.nvim_get_current_win()
+  end
+
+  vim.api.nvim_set_current_win(target_win)
+  vim.cmd("edit " .. vim.fn.fnameescape(file))
+
+  if line_num and char_num then
+    vim.api.nvim_win_set_cursor(target_win, {tonumber(line_num), tonumber(char_num) - 1})
   end
 end
 
