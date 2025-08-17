@@ -158,7 +158,7 @@ M.setup = function(opts)
 	vim.api.nvim_create_autocmd('BufWinEnter', {
 		pattern = '*compilation*',
 		callback = function()
-			vim.keymap.set('n', '<CR>', M.open_file())
+			vim.keymap.set('n', '<CR>', M.open_file)
 			vim.cmd([[
 				syntax match CompHeader /-\*- compile-mode;.* -\*-/
 				syntax match CompParam /Compilation started at .*/
