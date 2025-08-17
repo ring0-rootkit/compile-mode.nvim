@@ -1,6 +1,6 @@
 local M = {}
 
-local last_args = lv["compile_args"] or ""
+local last_args = ""
 local next = next
 
 local vertical_split = true
