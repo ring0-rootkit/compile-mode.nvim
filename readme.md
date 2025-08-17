@@ -3,6 +3,12 @@
 My own implementation of Emac's Compilation Mode in Neovim.
 This implementation is based on the one made by [libzfran's](https://github.com/lbzfran)
 
+## Showcase
+
+
+https://github.com/user-attachments/assets/f51a4061-869c-422f-a6c6-29e4e5ea332d
+
+
 ## Functionality
 
 Contains 3 functions:
