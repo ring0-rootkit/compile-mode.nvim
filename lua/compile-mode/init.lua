@@ -51,7 +51,7 @@ M.compile = function()
 
     if buf == nil then
         buf = create_buffer()
-	-- TODO: remove command, maybe add command to go to file
+        -- TODO: remove command, maybe add command to go to file
         -- vim.api.nvim_buf_set_keymap(buf, "n", "q", ":quit<CR>", { noremap = true, silent = true })
     end
 
@@ -123,6 +123,18 @@ M.setup = function(opts)
     vim.api.nvim_create_user_command("CompileSplitToggle", function()
         vertical_split = not vertical_split
     end, {})
+
+    vim.api.nvim_create_autocmd('BufWinEnter', {
+      pattern = '*compilation*',
+      callback = function()
+        vim.cmd([[
+          syntax match MyOutputHeader /-\*- compile-mode;.* -\*-/
+
+          highlight link MyOutputHeader Title
+        ]])
+      end
+    })
+
 end
 
 return M
