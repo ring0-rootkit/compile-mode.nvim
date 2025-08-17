@@ -140,6 +140,8 @@ M.setup = function(opts)
 				syntax match CompHelp /^help\(.*?:\)\?/
 				syntax match CompNote /^note\(.*?:\)\?/
 
+				syntax match CompLink /\S*:\d:\d/
+
 				highlight link CompHeader Title
 				highlight link CompParam Identifier
 				highlight link CompError ErrorMsg
@@ -148,6 +150,8 @@ M.setup = function(opts)
 				highlight link CompTip MoreMsg
 				highlight link CompHelp MoreMsg
 				highlight link CompNote MoreMsg
+
+				highlight link CompLink Directory
 			]])
 		end
 	})
