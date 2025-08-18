@@ -90,6 +90,9 @@ M.open_file = function()
 
   local file, line_num, char_num = string.match(line, "(%S+):(%d+):(%d+)")
   if not file then return end
+  if not filereadable(file) then
+	  retun
+  end
 
   -- Find the non-compilation window
   local target_win
@@ -170,7 +173,7 @@ M.setup = function(opts)
 				syntax match CompHelp /^help\(.*?:\)\?/
 				syntax match CompNote /^note\(.*?:\)\?/
 
-				syntax match CompLink /\S*:\d\+:\d\+/
+				syntax match CompLink /\S*[^0-9 ]\+\S*:\d\+:\d\+/
 
 				highlight link CompHeader Title
 				highlight link CompParam Identifier
