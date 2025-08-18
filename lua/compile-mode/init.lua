@@ -90,9 +90,7 @@ M.open_file = function()
 
   local file, line_num, char_num = string.match(line, "(%S+):(%d+):(%d+)")
   if not file then return end
-  if not filereadable(file) then
-	  retun
-  end
+  if io.open(file, "r") == nil then return end
 
   -- Find the non-compilation window
   local target_win
