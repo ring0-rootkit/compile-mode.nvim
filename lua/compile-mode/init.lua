@@ -42,6 +42,7 @@ local function kill()
 	last_pid = -1
 	last_job_id = -1
 	if buf ~= nil then
+		local end_date = vim.fn.strftime("%c")
 		vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Compilation stopped at " .. end_date })
 	end
 end
