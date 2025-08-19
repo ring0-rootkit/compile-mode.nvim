@@ -76,8 +76,8 @@ M.compile = function()
 	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "command: " .. last_args })
 
 	local job_id = vim.fn.jobstart(last_args, {
-		stdout_buffered = true,
-		stderr_buffered = true,
+		stdout_buffered = false,
+		stderr_buffered = false,
 		on_stdout = append_data,
 		on_stderr = append_data,
 		on_exit = append_data,
