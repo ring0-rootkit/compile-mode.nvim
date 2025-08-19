@@ -7,7 +7,6 @@ local vertical_split = true
 local save_args = true
 
 local last_pid = -1
-local is_build_running = false
 
 local function create_buffer()
 	local buf = vim.api.nvim_create_buf(true, true)
@@ -37,8 +36,9 @@ end
 
 M.compile = function()
 	if last_pid ~= -1 then
-		is_build_running = false
 		os.execute(string.format("kill %d", last_pid))
+		last_pid = -1
+		return
 	end
 	if last_args == "" then
 		-- prompt user if no argument has been saved yet.
@@ -62,9 +62,8 @@ M.compile = function()
 
 	local start_date = vim.fn.strftime("%c")
 	local append_data = function(_, data, event)
-		vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "pid" .. last_pid })
-		if is_build_running then
-			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "is running " })
+		if last_pid == -1 then
+			return
 		end
 		local end_date = vim.fn.strftime("%c")
 		if event == "stdout" then
@@ -97,11 +96,9 @@ M.compile = function()
 
 	local pid = vim.fn.jobpid(job_id)
 	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "pid: " .. pid })
+	last_pid = pid
 
 	vim.api.nvim_win_set_buf(win, buf)
-
-	last_pid = pid
-	is_build_running = true
 end
 
 M.open_file = function()
