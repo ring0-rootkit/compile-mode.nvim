@@ -36,11 +36,9 @@ end
 
 M.compile = function()
 	if last_pid ~= -1 then
-		-- os.execute(string.format("kill %d", last_pid))
-		vim.fn.system({"kill", last_pid})
+		os.execute(string.format("kill %d", last_pid))
 		last_pid = -1
-		-- why do I have to do this????
-		-- M.compile()
+	vim.api.nvim_win_set_buf(win, buf)
 	end
 	if last_args == "" then
 		-- prompt user if no argument has been saved yet.
@@ -83,6 +81,7 @@ M.compile = function()
 			last_pid = -1
 		end
 	end
+	vim.api.nvim_win_set_buf(win, buf)
 
 	vim.api.nvim_buf_set_lines(buf, 0, -1, false, { "-*- compile-mode; directory: '" .. vim.fn.getcwd() .. "' -*-" })
 	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Compilation started at " .. start_date })
