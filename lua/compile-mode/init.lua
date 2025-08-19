@@ -9,6 +9,8 @@ local save_args = true
 local last_pid = -1
 local last_job_id = -1
 
+local kill_msg = "Press ME to stop the program" 
+
 local function create_buffer()
 	local buf = vim.api.nvim_create_buf(true, true)
 	vim.api.nvim_buf_set_name(buf, "*compilation*")
@@ -35,11 +37,15 @@ local function savetolv()
 	end
 end
 
+local function kill()
+	os.execute(string.format("kill %d", last_pid))
+	last_pid = -1
+	last_job_id = -1
+end
+
 M.compile = function()
 	if last_pid ~= -1 then
-		os.execute(string.format("kill %d", last_pid))
-		last_pid = -1
-		last_job_id = -1
+		kill()
 	end
 	if last_args == "" then
 		-- prompt user if no argument has been saved yet.
@@ -87,7 +93,7 @@ M.compile = function()
 
 	vim.api.nvim_buf_set_lines(buf, 0, -1, false, { "-*- compile-mode; directory: '" .. vim.fn.getcwd() .. "' -*-" })
 	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Compilation started at " .. start_date })
-	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "command: " .. last_args })
+	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Command: " .. last_args })
 
 	local job_id = vim.fn.jobstart(last_args, {
 		stdout_buffered = false,
@@ -98,7 +104,7 @@ M.compile = function()
 	})
 
 	local pid = vim.fn.jobpid(job_id)
-	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "pid: " .. pid })
+	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "PID: " .. pid })
 	last_pid = pid
 	last_job_id = job_id
 
@@ -106,35 +112,40 @@ M.compile = function()
 end
 
 M.open_file = function()
-  local line = vim.api.nvim_get_current_line()
+	local line = vim.api.nvim_get_current_line()
 
-  local file, line_num, char_num = string.match(line, "(%S+):(%d+):(%d+)")
-  if not file then return end
-  if io.open(vim.fn.fnameescape(file), "r") == nil then return end
+	if line == kill_msg then
+		kill()
+		return
+	end
+
+	local file, line_num, char_num = string.match(line, "(%S+):(%d+):(%d+)")
+	if not file then return end
+	if io.open(vim.fn.fnameescape(file), "r") == nil then return end
 
   -- Find the non-compilation window
-  local target_win
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    local buf = vim.api.nvim_win_get_buf(win)
-    local buf_name = vim.api.nvim_buf_get_name(buf)
-    if not string.match(buf_name, "*compilation*") then
-      target_win = win
-      break
-    end
-  end
+	local target_win
+		for _, win in ipairs(vim.api.nvim_list_wins()) do
+			local buf = vim.api.nvim_win_get_buf(win)
+			local buf_name = vim.api.nvim_buf_get_name(buf)
+			if not string.match(buf_name, "*compilation*") then
+			  target_win = win
+			  break
+		end
+	end
 
   -- If no suitable window found, create one
-  if not target_win then
-    vim.cmd("vsplit")
-    target_win = vim.api.nvim_get_current_win()
-  end
+	if not target_win then
+		vim.cmd("vsplit")
+		target_win = vim.api.nvim_get_current_win()
+	end
 
-  vim.api.nvim_set_current_win(target_win)
-  vim.cmd("edit " .. vim.fn.fnameescape(file))
+	vim.api.nvim_set_current_win(target_win)
+	vim.cmd("edit " .. vim.fn.fnameescape(file))
 
-  if line_num and char_num then
-    vim.api.nvim_win_set_cursor(target_win, {tonumber(line_num), tonumber(char_num) - 1})
-  end
+	if line_num and char_num then
+		vim.api.nvim_win_set_cursor(target_win, {tonumber(line_num), tonumber(char_num) - 1})
+	end
 end
 
 M.compile_setup = function(opts)
@@ -182,9 +193,10 @@ M.setup = function(opts)
 				syntax match CompHeader /^-\*- compile-mode;.* -\*-/
 				syntax match CompParam /^Compilation started at .*/
 				syntax match CompParam /^Compilation finished at .*/
-				syntax match CompParam /^command:/
-				syntax match CompParam /^pid:/
+				syntax match CompParam /^Command:/
+				syntax match CompParam /^PID:/
 
+				syntax match CompError /^Press ME to stop the program$/
 				syntax match CompError /^error\(.*?:\)\?/
 				syntax match CompWarn /^warning\(.*?:\)\?/
 
