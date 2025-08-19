@@ -41,6 +41,9 @@ local function kill()
 	os.execute(string.format("kill %d", last_pid))
 	last_pid = -1
 	last_job_id = -1
+	if buf ~= nil then
+		vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Compilation stopped at " .. end_date })
+	end
 end
 
 M.compile = function()
@@ -94,6 +97,7 @@ M.compile = function()
 	vim.api.nvim_buf_set_lines(buf, 0, -1, false, { "-*- compile-mode; directory: '" .. vim.fn.getcwd() .. "' -*-" })
 	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Compilation started at " .. start_date })
 	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Command: " .. last_args })
+	vim.api.nvim_buf_set_lines(buf, -1, -1, false, kill_msg)
 
 	local job_id = vim.fn.jobstart(last_args, {
 		stdout_buffered = false,
@@ -197,6 +201,7 @@ M.setup = function(opts)
 				syntax match CompParam /^PID:/
 
 				syntax match CompError /^Press ME to stop the program$/
+				syntax match CompError /^Compilation stopped at .*/
 				syntax match CompError /^error\(.*?:\)\?/
 				syntax match CompWarn /^warning\(.*?:\)\?/
 
