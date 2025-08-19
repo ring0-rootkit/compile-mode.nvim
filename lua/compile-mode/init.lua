@@ -62,6 +62,8 @@ M.compile = function()
 
 	local start_date = vim.fn.strftime("%c")
 	local append_data = function(_, data, event)
+		vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "is running " .. is_build_running })
+		vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "pid" .. last_pid })
 		if not is_build_running then
 			return
 		end
@@ -94,11 +96,10 @@ M.compile = function()
 		on_exit = append_data,
 	})
 
-	is_build_running = true
-
 	local pid = vim.fn.jobpid(job_id)
 	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "pid: " .. pid })
 	last_pid = pid
+	is_build_running = true
 
 	vim.api.nvim_win_set_buf(win, buf)
 end
