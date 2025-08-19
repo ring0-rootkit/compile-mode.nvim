@@ -38,6 +38,8 @@ M.compile = function()
 	if last_pid ~= -1 then
 		os.execute(string.format("kill %d", last_pid))
 		last_pid = -1
+		-- why do I have to do this????
+		M.compile()
 	end
 	if last_args == "" then
 		-- prompt user if no argument has been saved yet.
