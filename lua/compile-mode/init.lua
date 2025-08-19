@@ -6,6 +6,8 @@ local next = next
 local vertical_split = true
 local save_args = true
 
+local last_pid = -1
+
 local function create_buffer()
 	local buf = vim.api.nvim_create_buf(true, true)
 	vim.api.nvim_buf_set_name(buf, "*compilation*")
@@ -33,6 +35,9 @@ local function savetolv()
 end
 
 M.compile = function()
+	if last_pid ~= -1 then
+		os.execute(string.format("kill %d", last_pid))
+	end
 	if last_args == "" then
 		-- prompt user if no argument has been saved yet.
 		print("compile-mode: compile command not set.")
@@ -68,6 +73,7 @@ M.compile = function()
 		end
 		if event == "exit" then
 			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Compilation finished at " .. end_date })
+			last_pid = -1
 		end
 	end
 
@@ -85,6 +91,7 @@ M.compile = function()
 
 	local pid = vim.fn.jobpid(job_id)
 	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "pid: " .. pid })
+	last_pid = pid
 
 	vim.api.nvim_win_set_buf(win, buf)
 end
