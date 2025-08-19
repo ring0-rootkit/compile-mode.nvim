@@ -39,7 +39,6 @@ M.compile = function()
 	if last_pid ~= -1 then
 		is_build_running = false
 		os.execute(string.format("kill %d", last_pid))
-			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "killed" })
 	end
 	if last_args == "" then
 		-- prompt user if no argument has been saved yet.
@@ -98,10 +97,11 @@ M.compile = function()
 
 	local pid = vim.fn.jobpid(job_id)
 	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "pid: " .. pid })
-	last_pid = pid
-	is_build_running = true
 
 	vim.api.nvim_win_set_buf(win, buf)
+
+	last_pid = pid
+	is_build_running = true
 end
 
 M.open_file = function()
