@@ -97,7 +97,7 @@ M.compile = function()
 	vim.api.nvim_buf_set_lines(buf, 0, -1, false, { "-*- compile-mode; directory: '" .. vim.fn.getcwd() .. "' -*-" })
 	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Compilation started at " .. start_date })
 	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Command: " .. last_args })
-	vim.api.nvim_buf_set_lines(buf, -1, -1, false, kill_msg)
+	vim.api.nvim_buf_set_lines(buf, -1, -1, false, { kill_msg })
 
 	local job_id = vim.fn.jobstart(last_args, {
 		stdout_buffered = false,
