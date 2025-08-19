@@ -38,6 +38,7 @@ local function savetolv()
 end
 
 local function kill()
+	os.execute(string.format("pkill -P %d", last_pid))
 	os.execute(string.format("kill %d", last_pid))
 	last_pid = -1
 	last_job_id = -1
