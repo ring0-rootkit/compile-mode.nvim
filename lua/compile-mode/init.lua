@@ -163,10 +163,11 @@ M.setup = function(opts)
 		callback = function()
 			vim.keymap.set('n', '<CR>', M.open_file)
 			vim.cmd([[
-				syntax match CompHeader /-\*- compile-mode;.* -\*-/
-				syntax match CompParam /Compilation started at .*/
-				syntax match CompParam /Compilation finished at .*/
-				syntax match CompParam /command:/
+				syntax match CompHeader /^-\*- compile-mode;.* -\*-/
+				syntax match CompParam /^Compilation started at .*/
+				syntax match CompParam /^Compilation finished at .*/
+				syntax match CompParam /^command:/
+				syntax match CompParam /^pid:/
 
 				syntax match CompError /^error\(.*?:\)\?/
 				syntax match CompWarn /^warning\(.*?:\)\?/
