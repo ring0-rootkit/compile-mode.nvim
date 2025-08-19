@@ -62,10 +62,9 @@ M.compile = function()
 
 	local start_date = vim.fn.strftime("%c")
 	local append_data = function(_, data, event)
-		vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "is running " .. is_build_running })
 		vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "pid" .. last_pid })
-		if not is_build_running then
-			return
+		if is_build_running then
+			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "is running " })
 		end
 		local end_date = vim.fn.strftime("%c")
 		if event == "stdout" then
