@@ -1,0 +1,10 @@
+-*- compile-mode; directory: '/Users/r0/personal/compile-mode.nvim' -*-
+Compilation started at Wed Aug 27 11:48:50 2025
+Command: echo hi
+Press ME to stop the program
+PID: 24715
+hi
+
+
+
+Compilation finished at Wed Aug 27 11:48:50 2025

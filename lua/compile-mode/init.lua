@@ -69,6 +69,13 @@ M.compile = function()
 		return
 	end
 
+	if buf == nil then
+		goto_buf_by_name("*compilation*")
+		if buf == nil then
+			buf = create_buffer()
+		end
+	end
+
 	local win = is_buffer_open(buf)
 	if win == nil then
 		if vertical_split then
@@ -77,13 +84,6 @@ M.compile = function()
 			vim.cmd("botright new")
 		end
 		win = vim.api.nvim_get_current_win()
-	end
-
-	if buf == nil then
-		goto_buf_by_name("*compilation*")
-		if buf == nil then
-			buf = create_buffer()
-		end
 	end
 
 	local start_date = vim.fn.strftime("%c")
