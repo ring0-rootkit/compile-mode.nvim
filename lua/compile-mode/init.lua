@@ -47,6 +47,18 @@ local function kill()
 	end
 end
 
+local function goto_buf_by_name(name)
+	for _, b in ipairs(vim.api.nvim_list_bufs()) do
+		if vim.api.nvim_buf_is_loaded(b) then
+			local bufname = vim.api.nvim_buf_get_name(b)
+				if bufname:match(name) then
+					buf = b
+				return
+			end
+		end
+	end
+end
+
 M.compile = function()
 	if last_pid ~= -1 then
 		kill()
@@ -68,7 +80,10 @@ M.compile = function()
 	end
 
 	if buf == nil then
-		buf = create_buffer()
+		goto_buf_by_name("*compilation*")
+		if buf == nil then
+			buf = create_buffer()
+		end
 	end
 
 	local start_date = vim.fn.strftime("%c")
